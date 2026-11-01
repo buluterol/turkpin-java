@@ -6,7 +6,7 @@
   <artifactId>turkpin</artifactId>
   <version>1.0.0</version>
   <name>turkpin</name>
-  <description>Java client for the Turkpin dealer (bayi) API: e-pin games, products, orders and balance.</description>
+  <description>Java client for the Turkpin dealer (bayi) API with Spring Boot auto-configuration: e-pin games, products, orders and balance.</description>
   <url>https://github.com/buluterol/turkpin-java</url>
   <licenses>
     <license><name>MIT</name><url>https://opensource.org/licenses/MIT</url></license>
@@ -14,8 +14,38 @@
   <properties>
     <maven.compiler.release>11</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <spring-boot.version>2.7.18</spring-boot.version>
   </properties>
+  <profiles>
+    <!-- mvn test -Pspring-boot-3: runs the tests against Spring Boot 3 (Java 17+) -->
+    <profile>
+      <id>spring-boot-3</id>
+      <properties>
+        <spring-boot.version>3.3.5</spring-boot.version>
+        <maven.compiler.release>17</maven.compiler.release>
+      </properties>
+    </profile>
+  </profiles>
   <dependencies>
+    <!-- Spring Boot auto-configuration; only needed in Spring Boot applications -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-autoconfigure</artifactId>
+      <version>${spring-boot.version}</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-test</artifactId>
+      <version>${spring-boot.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.26.3</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>

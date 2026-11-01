@@ -19,3 +19,6 @@ jobs:
           java-version: ${{ matrix.java }}
           cache: maven
       - run: mvn -B test
+      - name: Spring Boot 3
+        if: matrix.java != '11'
+        run: mvn -B test -Pspring-boot-3

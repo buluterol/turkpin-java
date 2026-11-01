@@ -2,7 +2,7 @@
 
 [![test](https://github.com/buluterol/turkpin-java/actions/workflows/test.yml/badge.svg)](https://github.com/buluterol/turkpin-java/actions/workflows/test.yml)
 
-Turkpin bayi API'si için Java istemcisi: e-pin oyun ve ürün listesi, sipariş verme, sipariş durumu, sipariş listesi ve bakiye.
+Turkpin bayi API'si için Java istemcisi; Spring Boot entegrasyonu dahil: e-pin oyun ve ürün listesi, sipariş verme, sipariş durumu, sipariş listesi ve bakiye.
 
 > Bu paket topluluk tarafından yazılmıştır; Turkpin'in resmi paketi değildir. API'nin güncel ve bağlayıcı tanımı için [dev.turkpin.com](https://dev.turkpin.com) dokümanına bakın.
 
@@ -53,6 +53,35 @@ try {
 System.out.println(tp.getBalance().balance); // BigDecimal
 ```
 
+## Spring Boot
+
+Otomatik yapılandırma Spring Boot 2.7 ve 3.x ile çalışır; `turkpin.username` tanımlıysa bir `TurkpinClient` bean'i oluşturulur.
+
+`application.yml`:
+
+```yaml
+turkpin:
+  username: ${TURKPIN_USERNAME}
+  password: ${TURKPIN_PASSWORD}
+  test: false
+  timeout: 30 # saniye
+```
+
+```java
+@Service
+public class OrderService {
+    private final TurkpinClient turkpin;
+
+    public OrderService(TurkpinClient turkpin) {
+        this.turkpin = turkpin;
+    }
+}
+```
+
+Kendi `TurkpinClient` bean'inizi tanımlarsanız otomatik yapılandırma devre dışı kalır.
+
+Spring kullanmayan projeler (Quarkus, Micronaut, Jakarta EE, düz Java) istemciyi doğrudan oluşturur; Spring bağımlılığı `optional` olduğu için projeye taşınmaz. Kotlin projeleri de aynı paketi kullanabilir.
+
 ## Desteklenen komutlar
 
 | API komutu | Açıklama |
@@ -84,11 +113,12 @@ Testler gerçek API'ye bağlanmaz; örnek XML cevaplarıyla çalışır.
 
 ```sh
 mvn test
+mvn test -Pspring-boot-3  # Java 17+
 ```
 
 ## English
 
-Java client for the Turkpin dealer API (e-pin games, products, orders, order status, order history, balance). Community-maintained, not an official Turkpin package; see [dev.turkpin.com](https://dev.turkpin.com) for the authoritative API reference. The sandbox (`turkpin.net`) only accepts requests from server IP addresses registered with Turkpin (otherwise error `002`). Install and usage are shown above; method names are in English, while API command and field names follow the original Turkish API.
+Java client for the Turkpin dealer API with Spring Boot auto-configuration (e-pin games, products, orders, order status, order history, balance). Community-maintained, not an official Turkpin package; see [dev.turkpin.com](https://dev.turkpin.com) for the authoritative API reference. The sandbox (`turkpin.net`) only accepts requests from server IP addresses registered with Turkpin (otherwise error `002`). Install and usage are shown above; method names are in English, while API command and field names follow the original Turkish API.
 
 ## Lisans
 
